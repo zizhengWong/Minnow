@@ -11,7 +11,7 @@
 class Wrap32
 {
 protected:
-  uint32_t raw_value_ {}; //开始的数
+  uint32_t raw_value_ {}; // seqno
 
 public:
   explicit Wrap32( uint32_t raw_value ) : raw_value_( raw_value ) {}

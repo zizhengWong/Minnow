@@ -3,19 +3,22 @@
 using namespace std;
 
 // 把absolute seqno包装成seqno
+// zero_point就是ISN
 Wrap32 Wrap32::wrap( uint64_t n, Wrap32 zero_point )
 {
-  return Wrap32{(uint32_t)((n + zero_point.raw_value_) % ((uint64_t)1 << 32))};
+  return Wrap32 { zero_point + static_cast<uint32_t>( n ) };
 }
 
 uint64_t Wrap32::unwrap( Wrap32 zero_point, uint64_t checkpoint ) const
 {
-  uint64_t INT32_RANGE = 1L << 32;
-    uint32_t offset = this->raw_value_ - zero_point.raw_value_;
-    if (checkpoint > offset) {
-        uint64_t real_checkpoint = (checkpoint - offset) + (INT32_RANGE >> 1);
-        uint64_t wrap_num = real_checkpoint / INT32_RANGE;
-        return wrap_num * INT32_RANGE + offset;
-    }
-    return offset;
+  uint32_t offset = raw_value_ - zero_point.raw_value_;
+  uint32_t low32 = (uint32_t)checkpoint;
+  uint64_t high32 = ( checkpoint & 0xffffffff00000000 );
+  if ( offset == low32 )
+    return high32 + offset;
+  // 放心，uint运算不会得到负数，只会得到相对距离
+  else if ( ( offset - low32 ) < ( low32 - offset ) )
+    return offset > low32 ? high32 + offset : high32 + offset + ( 1L << 32 );
+  else
+    return offset < low32 ? high32 + offset : ( high32 == 0 ? offset : high32 + offset - ( 1L << 32 ) );
 }
