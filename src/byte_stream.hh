@@ -15,7 +15,8 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t bytes_pushed_ { 0 };
   uint64_t bytes_poped_ { 0 };
-  std::string buffer_ {""}; // 默认为""",但还是要初始化一下，tidy让我不要初始化，但Lab1里编译的时候又因为没初始化报错。。。
+  // 默认为""",但还是要初始化一下，tidy让我不要初始化，但Lab1里编译的时候又因为没初始化报错。。。
+  std::string buffer_ { "" };
   bool closed_ { false };
   bool error_ { false };
 

@@ -9,7 +9,7 @@ void TCPReceiver::receive( TCPSenderMessage message, Reassembler& reassembler, W
       return;
     }
     syn_ = true;
-    zero_point_ = message.seqno;
+    zero_point_ = message.seqno; // 设置ISN
   }
   if ( message.FIN ) {
     fin_ = true;

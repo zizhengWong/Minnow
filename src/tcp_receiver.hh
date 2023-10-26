@@ -19,5 +19,5 @@ public:
 private:
   bool fin_ = false;
   bool syn_ = false;
-  Wrap32 zero_point_ {0};
+  Wrap32 zero_point_ { 0 };
 };
